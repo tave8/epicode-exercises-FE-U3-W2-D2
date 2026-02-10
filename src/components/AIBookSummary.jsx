@@ -1,34 +1,35 @@
-import { Component } from "react"
+import { useState, useEffect } from "react"
+
 import { Container, Col, Form, Row, Button, Spinner } from "react-bootstrap"
-import { ArrowRight, Openai, Stars } from 'react-bootstrap-icons'
+import { ArrowRight, Openai, Stars } from "react-bootstrap-icons"
 
-class AIBookSummary extends Component {
+const AIBookSummary = (props) => {
+  return (
+    <>
+      <div>
+        {/* book summary */}
+        <p>{getBookSummaryComponent({ props })()}</p>
 
-  getBookSummaryComponent() {
+        {/* spinner */}
+        {props.isLoading && (
+          <div className="text-center mt-3">
+            <Spinner variant="success" animation="grow" />
+          </div>
+        )}
+      </div>
+    </>
+  )
+}
+
+const getBookSummaryComponent = (componentInfo) => {
+  const { props } = componentInfo
+
+  return () => {
     return (
       <>
         {/* AI symbol */}
-        {!this.props.isLoading && <Stars/>}{" "}
-        {/* book summary */}
-        {!this.props.isLoading && this.props.bookSummary}
-      </>
-    ) 
-  } 
-
-  render() {
-    return (
-      <>
-        <div>
-          {/* book summary */}
-          <p>{this.getBookSummaryComponent()}</p>
-
-          {/* spinner */}
-          {this.props.isLoading && (
-            <div className="text-center mt-3">
-              <Spinner variant="success" animation="grow" />
-            </div>
-          )}
-        </div>
+        {!props.isLoading && <Stars />} {/* book summary */}
+        {!props.isLoading && props.bookSummary}
       </>
     )
   }
