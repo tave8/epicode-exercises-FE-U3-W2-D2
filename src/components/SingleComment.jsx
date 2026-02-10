@@ -1,8 +1,32 @@
-import { Component } from "react"
+import { useState, useEffect } from "react"
+
 import { Container, Col, Form, Row, Button, Spinner } from "react-bootstrap"
 
-class SingleComment extends Component {
-  handlerDeleteComment = (event) => {
+const SingleComment = (props) => {
+  return (
+    <>
+      <Row className="border-bottom py-2">
+        {/* review  */}
+        <Col>
+          {props.review.rate} | {props.review.comment}{" "}
+        </Col>
+
+        {/* actions */}
+        <Col className="text-end">
+          <Button variant="danger" className="fs-6" onClick={handleDeleteComment({ props })} size="sm">
+            Delete
+          </Button>
+        </Col>
+      </Row>
+    </>
+  )
+}
+
+const handleDeleteComment = (componentInfo) => {
+  const { props } = componentInfo
+
+  return async (event) => {
+    console.log(event)
     // const commentId = this.props.review._id
     // const apiUrl = `https://striveschool-api.herokuapp.com/api/comments/${commentId}`
     // const reviewToDelete = {
@@ -30,26 +54,6 @@ class SingleComment extends Component {
     //   .catch((err) => {
     //     console.log("error while saving", err)
     //   })
-  }
-
-  render() {
-    return (
-      <>
-        <Row className="border-bottom py-2">
-          {/* review  */}
-          <Col>
-            {this.props.review.rate} | {this.props.review.comment}{" "}
-          </Col>
-
-          {/* actions */}
-          <Col className="text-end">
-            <Button variant="danger" className="fs-6" onClick={this.handlerDeleteComment} size="sm">
-              Delete
-            </Button>
-          </Col>
-        </Row>
-      </>
-    )
   }
 }
 
