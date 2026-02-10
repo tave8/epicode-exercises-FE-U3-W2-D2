@@ -7,10 +7,82 @@ const initialReview = {
 }
 
 const AddComment = (props) => {
-
   const [formValues, setFormValues] = useState(initialReview)
 
-  const onFormSubmit = (event) => {
+  return (
+    <>
+      <Container>
+        <Row>
+          <Col>
+            <h3 className="text-center">Write your review</h3>
+          </Col>
+        </Row>
+
+        {/* best practice: row -> col */}
+        <Form onSubmit={onFormSubmit({ props, formValues, setFormValues })}>
+          <Row className="flex-column g-3">
+            {/* review rate */}
+            <Col>
+              {/* review rate */}
+              <Form.Group>
+                <Form.Label>Choose rate</Form.Label>
+                <Form.Select onChange={onRateChange({ formValues, setFormValues })} value={formValues.rate}>
+                  <option value="5">5</option>
+                  <option value="4">4</option>
+                  <option value="3">3</option>
+                  <option value="2">2</option>
+                  <option value="1">1</option>
+                </Form.Select>
+              </Form.Group>
+            </Col>
+
+            {/* review comment */}
+            <Col>
+              {/* review text */}
+              <Form.Group>
+                <Form.Label>Review</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  onChange={onCommentChange({ formValues, setFormValues })}
+                  value={formValues.comment}
+                  placeholder={`How did you find ${props.book.title}?`}
+                  style={{ minHeight: "200px" }}
+                />
+              </Form.Group>
+            </Col>
+
+            {/* submit button */}
+            <Col className="text-center">
+              {/* submit review button */}
+              <Button type="submit">Submit</Button>
+            </Col>
+          </Row>
+        </Form>
+      </Container>
+    </>
+  )
+}
+
+const onCommentChange = (componentInfo) => {
+  const { formValues, setFormValues } = componentInfo
+  return (event) => {
+    const newComment = event.target.value
+    setFormValues({ ...formValues, comment: newComment })
+  }
+}
+
+const onRateChange = (componentInfo) => {
+  const { formValues, setFormValues } = componentInfo
+  return (event) => {
+    const newRate = event.target.value
+    setFormValues({ ...formValues, rate: newRate })
+  }
+}
+
+const onFormSubmit = (componentInfo) => {
+  const { props, formValues, setFormValues } = componentInfo
+
+  return (event) => {
     event.preventDefault()
 
     if (formValues.comment.trim() == "") {
@@ -49,69 +121,6 @@ const AddComment = (props) => {
         console.log("error while saving", err)
       })
   }
-
-  const onRateChange = (event) => {
-    const newRate = event.target.value
-    setFormValues({...formValues, rate: newRate})
-  }
-
-  const onCommentChange = (event) => {
-    const newComment = event.target.value
-    setFormValues({...formValues, comment: newComment})
-  }
-
-  return (
-    <>
-      <Container>
-        <Row>
-          <Col>
-            <h3 className="text-center">Write your review</h3>
-          </Col>
-        </Row>
-
-        {/* best practice: row -> col */}
-        <Form onSubmit={onFormSubmit}>
-          <Row className="flex-column g-3">
-            {/* review rate */}
-            <Col>
-              {/* review rate */}
-              <Form.Group>
-                <Form.Label>Choose rate</Form.Label>
-                <Form.Select onChange={onRateChange} value={formValues.rate}>
-                  <option value="5">5</option>
-                  <option value="4">4</option>
-                  <option value="3">3</option>
-                  <option value="2">2</option>
-                  <option value="1">1</option>
-                </Form.Select>
-              </Form.Group>
-            </Col>
-
-            {/* review comment */}
-            <Col>
-              {/* review text */}
-              <Form.Group>
-                <Form.Label>Review</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  onChange={onCommentChange}
-                  value={formValues.comment}
-                  placeholder={`How did you find ${props.book.title}?`}
-                  style={{ minHeight: "200px" }}
-                />
-              </Form.Group>
-            </Col>
-
-            {/* submit button */}
-            <Col className="text-center">
-              {/* submit review button */}
-              <Button type="submit">Submit</Button>
-            </Col>
-          </Row>
-        </Form>
-      </Container>
-    </>
-  )
 }
 
 export default AddComment
