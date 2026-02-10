@@ -83,6 +83,7 @@ class CommentArea extends Component {
     // this.getReviews(this.props.book.asin)
   }
 
+  // eslint-disable-next-line no-unused-vars
   componentDidUpdate(prevProps, prevState) {
     const prevSelectedBook = prevProps.selectedBook
     const currSelectedBook = this.props.selectedBook
@@ -99,7 +100,7 @@ class CommentArea extends Component {
 
     if (selectedBookWasChanged) {
       // this.updateSelectedBook()
-      console.log("selected book was changed")
+      // console.log("selected book was changed")
       // console.log(prevProps, this.props)
       this.getReviews(this.props.selectedBook.asin)
       this.getBookSummaryFromTitle(this.props.selectedBook.title)

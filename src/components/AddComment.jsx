@@ -1,4 +1,4 @@
-import { Component } from "react"
+import { useState, useEffect } from "react"
 import { Container, Col, Form, Row, Button } from "react-bootstrap"
 
 const initialReview = {
@@ -6,23 +6,22 @@ const initialReview = {
   comment: "",
 }
 
-class AddComment extends Component {
-  state = {
-    formValues: initialReview,
-  }
+const AddComment = (props) => {
 
-  onFormSubmit = (event) => {
+  const [formValues, setFormValues] = useState(initialReview)
+
+  const onFormSubmit = (event) => {
     event.preventDefault()
 
-    if (this.state.formValues.comment.trim() == "") {
+    if (formValues.comment.trim() == "") {
       alert("Review cannot be empty")
       return
     }
 
     // the asin of the current book
-    const bookAsin = this.props.book.asin
+    const bookAsin = props.book.asin
 
-    const reviewToAdd = { ...this.state.formValues, elementId: bookAsin }
+    const reviewToAdd = { ...formValues, elementId: bookAsin }
 
     const apiUrl = `https://striveschool-api.herokuapp.com/api/comments`
 
@@ -40,10 +39,8 @@ class AddComment extends Component {
       .then((response) => {
         if (response.ok) {
           alert("Review successfully added")
-          this.setState({
-            formValues: initialReview,
-          })
-          this.props.getReviews(bookAsin)
+          setFormValues(initialReview)
+          props.getReviews(bookAsin)
         } else {
           throw new Error("Error while adding review")
         }
@@ -53,74 +50,68 @@ class AddComment extends Component {
       })
   }
 
-  onRateChange = (event) => {
+  const onRateChange = (event) => {
     const newRate = event.target.value
-    this.setState({
-      formValues: { ...this.state.formValues, rate: newRate },
-    })
+    setFormValues({...formValues, rate: newRate})
   }
 
-  onCommentChange = (event) => {
+  const onCommentChange = (event) => {
     const newComment = event.target.value
-    this.setState({
-      formValues: { ...this.state.formValues, comment: newComment },
-    })
+    setFormValues({...formValues, comment: newComment})
   }
 
-  render() {
-    return (
-      <>
-        <Container>
-          <Row>
+  return (
+    <>
+      <Container>
+        <Row>
+          <Col>
+            <h3 className="text-center">Write your review</h3>
+          </Col>
+        </Row>
+
+        {/* best practice: row -> col */}
+        <Form onSubmit={onFormSubmit}>
+          <Row className="flex-column g-3">
+            {/* review rate */}
             <Col>
-              <h3 className="text-center">Write your review</h3>
+              {/* review rate */}
+              <Form.Group>
+                <Form.Label>Choose rate</Form.Label>
+                <Form.Select onChange={onRateChange} value={formValues.rate}>
+                  <option value="5">5</option>
+                  <option value="4">4</option>
+                  <option value="3">3</option>
+                  <option value="2">2</option>
+                  <option value="1">1</option>
+                </Form.Select>
+              </Form.Group>
+            </Col>
+
+            {/* review comment */}
+            <Col>
+              {/* review text */}
+              <Form.Group>
+                <Form.Label>Review</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  onChange={onCommentChange}
+                  value={formValues.comment}
+                  placeholder={`How did you find ${props.book.title}?`}
+                  style={{ minHeight: "200px" }}
+                />
+              </Form.Group>
+            </Col>
+
+            {/* submit button */}
+            <Col className="text-center">
+              {/* submit review button */}
+              <Button type="submit">Submit</Button>
             </Col>
           </Row>
-
-          {/* best practice: row -> col */}
-          <Form onSubmit={this.onFormSubmit}>
-            <Row className="flex-column g-3">
-              {/* review rate */}
-              <Col>
-                {/* review rate */}
-                <Form.Group>
-                  <Form.Label>Choose rate</Form.Label>
-                  <Form.Select onChange={this.onRateChange} value={this.state.formValues.rate}>
-                    <option value="5">5</option>
-                    <option value="4">4</option>
-                    <option value="3">3</option>
-                    <option value="2">2</option>
-                    <option value="1">1</option>
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-
-              {/* review comment */}
-              <Col>
-                {/* review text */}
-                <Form.Group>
-                  <Form.Label>Review</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    onChange={this.onCommentChange}
-                    value={this.state.formValues.comment}
-                    placeholder={`How did you find ${this.props.book.title}?`}
-                    style={{ minHeight: "200px" }}
-                  />
-                </Form.Group>
-              </Col>
-
-              {/* submit button */}
-              <Col className="text-center">
-                {/* submit review button */}
-                <Button type="submit">Submit</Button>
-              </Col>
-            </Row>
-          </Form>
-        </Container>
-      </>
-    )
-  }
+        </Form>
+      </Container>
+    </>
+  )
 }
 
 export default AddComment
