@@ -6,8 +6,17 @@ const initialReview = {
   comment: "",
 }
 
+// REACT COMPONENT
 const AddComment = (props) => {
   const [formValues, setFormValues] = useState(initialReview)
+
+  // optional chaining
+  // props.onDone?.isLoading   
+  // if (props.onDone) {
+  //   props.onDone.isLoading 
+  // } else {
+  //   // niente
+  // }
 
   return (
     <>
@@ -63,6 +72,8 @@ const AddComment = (props) => {
   )
 }
 
+
+// HELPERS 
 const onCommentChange = (componentInfo) => {
   const { formValues, setFormValues } = componentInfo
   return (event) => {

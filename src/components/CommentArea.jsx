@@ -14,6 +14,9 @@ const CommentArea = (props) => {
   const [isLoading, setIsLoading] = useState(true)
   const [isLoadingSummary, setIsLoadingSummary] = useState(true)
 
+  // CommentArea all'avvio si monta ma non ho cliccato su alcun libro
+  // useEffect viene chiamato sempre al montaggio (default behavior)
+  // esempio dove true/false per non farlo eseguire al montaggio
   useEffect(() => {
     // make sure the book exists
     if (props.selectedBook) {
@@ -21,7 +24,12 @@ const CommentArea = (props) => {
       getBookSummaryFromTitle({ setIsLoadingSummary, setBookSummary })(props.selectedBook.title)
     }
   }, [props.selectedBook])
+  // se non metto array di dipendenze, useEffect gira sempre 
 
+  // 3 casi:
+  // senza array -> gira sempre
+  // array vuoto -> solo a montaggio
+  // len(array) > 0 -> al montaggio + ogni volta che dipendenza cambia
 
   return (
     <>
