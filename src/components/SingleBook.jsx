@@ -1,21 +1,27 @@
-import { Component } from "react"
+import { useState, useEffect } from "react"
+
 import { Card } from "react-bootstrap"
 
 // bookIsSelected si deriva dall null o meno di selectedBook. semplificare logica
 
-class SingleBook extends Component {
-  render() {
-    const selectedBookExists = this.props.selectedBook !== null
-    const isThisBookSelected = (selectedBookExists) && (this.props.book.asin === this.props.selectedBook.asin)
-    return (
-      <Card style={{ width: "18rem", height: "500px" }} className={isThisBookSelected ? "selected-card" : ""} key={this.props.book.asin}>
-        <Card.Img variant="top" src={this.props.book.img} onClick={() => {this.props.updateSelectedBook(this.props.book)}} />
-        <Card.Body>
-          <Card.Title>{this.props.book.title}</Card.Title>
-        </Card.Body>
-      </Card>
-    )
-  }
+const SingleBook = (props) => {
+  const selectedBookExists = props.selectedBook !== null
+  const isThisBookSelected = selectedBookExists && props.book.asin === props.selectedBook.asin
+
+  return (
+    <Card style={{ width: "18rem", height: "500px" }} className={isThisBookSelected ? "selected-card" : ""} key={props.book.asin}>
+      <Card.Img
+        variant="top"
+        src={props.book.img}
+        onClick={() => {
+          props.updateSelectedBook(props.book)
+        }}
+      />
+      <Card.Body>
+        <Card.Title>{props.book.title}</Card.Title>
+      </Card.Body>
+    </Card>
+  )
 }
 
 export default SingleBook
